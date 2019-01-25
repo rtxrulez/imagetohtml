@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Image Color</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <style>
+        body {
+            padding: 0;
+            margin: 0;
+            background: greenyellow;
+        }
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .image {
+            margin: 0 auto;
+            outline: 1px solid black;
+            font-size:0;
+        }
+        .image > div {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="image">
+
+        </div>
+    </div>
+    <script>
+        let $img = $('.image');
+        let jqxhr = $.getJSON("imagePixel.json")
+            .done(function (imageInfo) {
+                console.log("second success", imageInfo);
+                $img.css({
+                    'width': imageInfo.width,
+                    'height': imageInfo.height
+                });
+
+                const width = imageInfo.pixelW;
+                const height = imageInfo.pixelH;
+                imageInfo.pixels.map((val, key) => {
+                    console.log('v', val)
+                    $img.append(`<div style="background: ${val}; width: ${width}px; height: ${height}px"></div>`)
+                })
+            })
+    </script>
+</body>
+
+</html>
