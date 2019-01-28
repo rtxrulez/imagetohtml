@@ -4,15 +4,15 @@ var Jimp = require("jimp");
 const fs = require("fs");
 
 const jsonPath = "imagePixel.json";
-const pathSource = "images/n.jpg";
+const pathSource = "images/anna.blok.jpg";
 const pathBuild = "build/n.jpg";
-const pixelW = 10;
-const pixelH = 10;
+const pixelW = 16;
+const pixelH = 16;
 const size = sizeOf(pathSource);
-let iterationX = size.width
-let iterationY = size.height
+// let iterationX = size.width
+// let iterationY = size.height
 
-console.log(size, size.width / pixelW);
+console.log(size, size.height / pixelH);
 
 let imageInfo = {
   pixels: [],
@@ -52,13 +52,30 @@ function getImage(x, y, w, h) {
     });
 }
 
-// getImage(0, 0, 10, 10);
+getImage(0, 0, pixelW, pixelH);
 
-for (let h = 0; h < iterationY; h=h+pixelH) {
-  for (let w = 0; w < iterationX; w=w+pixelW) {
-    getImage(w, h, pixelW, pixelH);
+function iterationX(posX, posY) {
+  while (posX < size.width) {
+    posX = posX + pixelW;
+    getImage(posX, posY, pixelW, pixelH);
   }
 }
+
+function iterationY(posX, posY) {
+  console.log('height', size.height)
+  while (posY < size.height) {
+    posY = posY + pixelH;
+    iterationX(posX, posY, pixelW, pixelH);
+  }
+}
+
+iterationY(0, 0, pixelW, pixelH);
+
+// for (let h = 0; h < iterationY; h=h+pixelH) {
+//   for (let w = 0; w < iterationX; w=w+pixelW) {
+//     getImage(w, h, pixelW, pixelH);
+//   }
+// }
 
 setTimeout(() => {
   saveJson(imageInfo);
