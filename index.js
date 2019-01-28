@@ -28,7 +28,7 @@ function getColor(image, x, y, w, h) {
   // image.write("build/x" + x + ".jpg");
   image.getBufferAsync(mime).then(buffer => {
     getColors(buffer, mime).then(colors => {
-      const color = colors[1].css();
+      const color = colors[0].css();
       imageInfo.pixels.push(color);
       return color;
     });
@@ -54,8 +54,8 @@ function getImage(x, y, w, h) {
 
 // getImage(0, 0, 10, 10);
 
-for (let h = -10; h < iterationY; h=h+pixelH) {
-  for (let w = -10; w < iterationX; w=w+pixelW) {
+for (let h = 0; h < iterationY; h=h+pixelH) {
+  for (let w = 0; w < iterationX; w=w+pixelW) {
     getImage(w, h, pixelW, pixelH);
   }
 }
