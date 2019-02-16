@@ -4,7 +4,7 @@ var Jimp = require("jimp");
 const fs = require("fs");
 
 const jsonPath = "imagePixel.json";
-const pathSource = "images/anna.blok.jpg";
+const pathSource = "images/n.jpg";
 const pathBuild = "build/n.jpg";
 const pixelW = 16;
 const pixelH = 16;
@@ -26,7 +26,7 @@ function getColor(image, x, y, w, h) {
   const mime = image.getMIME();
   image.crop(x, y, w, h);
   // image.write("build/x" + x + ".jpg");
-  image.getBufferAsync(mime).then(buffer => {
+  return image.getBufferAsync(mime).then(buffer => {
     getColors(buffer, mime).then(colors => {
       const color = colors[0].css();
       imageInfo.pixels.push(color);
@@ -35,17 +35,38 @@ function getColor(image, x, y, w, h) {
   });
 }
 
-function saveJson(obj) {
-  let json = JSON.stringify(obj);
-  fs.writeFile(jsonPath, json, "utf8", () => {
-    console.log("Savt to Json");
-  });
-}
+let cursorPos = 0;
+let cursorPosY = 0;
 
 function getImage(x, y, w, h) {
+  console.log('xxx', x, y)
+  y = 59;
   Jimp.read(pathSource)
     .then(image => {
-      getColor(image, x, y, w, h);
+      const mime = image.getMIME();
+      return image.getBufferAsync(mime).then(buffer => {
+        return getColors(buffer, mime).then(colors => {
+          const color = colors[0].css();
+          imageInfo.pixels.push(color);
+        });
+      });
+    })
+    .then(color => {
+      cursorPos = cursorPos + pixelW;
+      if (cursorPos >= size.width) {
+        // cursorPosY = cursorPosY + pixelH;
+        // if (cursorPosY < size.height) {
+        //   getImage(cursorPos, cursorPosY, pixelW, pixelH);
+        // } else {
+        //   saveJson(imageInfo);
+        //   return;
+        // }
+        return
+      } else {
+        // getImage(cursorPos, cursorPosY, pixelW, pixelH);
+      }
+      console.log("color", imageInfo.pixels);
+      return color;
     })
     .catch(err => {
       console.log("err read", err);
@@ -53,30 +74,11 @@ function getImage(x, y, w, h) {
 }
 
 getImage(0, 0, pixelW, pixelH);
+getImage(300, 300, pixelW, pixelH);
 
-function iterationX(posX, posY) {
-  while (posX < size.width) {
-    posX = posX + pixelW;
-    getImage(posX, posY, pixelW, pixelH);
-  }
+function saveJson(obj) {
+  let json = JSON.stringify(obj);
+  fs.writeFile(jsonPath, json, "utf8", () => {
+    console.log("Savt to Json");
+  });
 }
-
-function iterationY(posX, posY) {
-  console.log('height', size.height)
-  while (posY < size.height) {
-    posY = posY + pixelH;
-    iterationX(posX, posY, pixelW, pixelH);
-  }
-}
-
-iterationY(0, 0, pixelW, pixelH);
-
-// for (let h = 0; h < iterationY; h=h+pixelH) {
-//   for (let w = 0; w < iterationX; w=w+pixelW) {
-//     getImage(w, h, pixelW, pixelH);
-//   }
-// }
-
-setTimeout(() => {
-  saveJson(imageInfo);
-}, 5000);
