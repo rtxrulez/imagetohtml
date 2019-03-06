@@ -38,7 +38,7 @@
 
         </div>
     </div>
-    <script>
+    <!-- <script>
         let $img = $('.image');
         let jqxhr = $.getJSON("imagePixel.json")
             .done(function (imageInfo) {
@@ -55,6 +55,14 @@
                     $img.append(`<div style="background: ${val}; width: ${width}px; height: ${height}px"></div>`)
                 })
             })
+    </script> -->
+    <script>
+import getImagePixels from "get-image-pixels"
+function getPicture(x, y, w, h) {
+  let d = getImagePixels(pathSource, { x: "0", y: 16, width: pixelW, height: pixelH });
+  console.log('d', d)
+}
+
     </script>
 </body>
 

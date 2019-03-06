@@ -1,10 +1,15 @@
+var pixels = require("get-image-pixels");
+var palette = require("get-rgba-palette");
+let getImagePixels = require("get-image-pixels");
+
 const getColors = require("get-image-colors");
+
 var sizeOf = require("image-size");
 var Jimp = require("jimp");
 const fs = require("fs");
 
 const jsonPath = "imagePixel.json";
-const pathSource = "images/n.jpg";
+const pathSource = "images/anna.blok.jpg";
 const pathBuild = "build/n.jpg";
 const pixelW = 16;
 const pixelH = 16;
@@ -39,8 +44,7 @@ let cursorPos = 0;
 let cursorPosY = 0;
 
 function getImage(x, y, w, h) {
-  console.log('xxx', x, y)
-  y = 59;
+  console.log("xxx", x, y);
   Jimp.read(pathSource)
     .then(image => {
       const mime = image.getMIME();
@@ -61,7 +65,7 @@ function getImage(x, y, w, h) {
         //   saveJson(imageInfo);
         //   return;
         // }
-        return
+        return;
       } else {
         // getImage(cursorPos, cursorPosY, pixelW, pixelH);
       }
@@ -73,8 +77,14 @@ function getImage(x, y, w, h) {
     });
 }
 
-getImage(0, 0, pixelW, pixelH);
-getImage(300, 300, pixelW, pixelH);
+function getPicture(x, y, w, h) {
+  let d = getImagePixels(pathSource, { x: "0", y: 16, width: pixelW, height: pixelH });
+  console.log('d', d)
+}
+
+// getImage(0, 0, pixelW, pixelH);
+// getImage(0, 40, pixelW, pixelH);
+getPicture(0, 0, pixelW, pixelH);
 
 function saveJson(obj) {
   let json = JSON.stringify(obj);
